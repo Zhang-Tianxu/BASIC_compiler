@@ -14,6 +14,7 @@
 #include "exp.h"
 #include "statement.h"
 #include "tokenscanner.h"
+#include "program.h"
 
 
 
@@ -37,7 +38,7 @@ enum IdentifierType {REM,LET,PRINT,INPUT,GOTO,IF,END,RUN,LIST,CLEAR,HELP,QUIT};
  * which will then go through and read the remaining tokens on the line and assemble them into a PrintStmt object.
  *
 */
-Statement* perseStatement(TokenScanner scanner);
+Statement* parseStatement(TokenScanner & scanner);
 
 Expression* parseExp(TokenScanner & scanner);
 

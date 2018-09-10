@@ -33,22 +33,21 @@ void ProcessLine(string line, Program & program, EvalState & state) {//Òª±£´æ³ÌĞ
 	if (isdigit(firstToken[0]))//Command line with number, then store it into class Program
 	{
 		int tokenNumber = stoi(firstToken);
-	//	if ()
-	//	{
+		if (scanner.getLength() > 1)
+		{
+			std::cout << "scanner's length is " << scanner.getLength() << std::endl;
 		program.addSourceLine(tokenNumber, line);
-	//	}
-	//	else//only line number, then delete sourceline
-	//	{
-	//		program.removeSourceLine(tokenNumber);
-	//	}
+		}
+		else//only line number, then delete sourceline
+		{
+			program.removeSourceLine(tokenNumber);
+		}
 	}
-	//else//Command line with no number, then excute it directly
-	//{
-	//	Expression *exp = parseExp(scanner);
-	//	int value = exp->eval(state);
-	//	cout << value << endl;
-	//	delete exp;
-	//}
+	else//Command line with no number, then excute it directly
+	{
+		Statement* statement = parseStatement(scanner);
+		statement->execute(program,state);
+	}
 	
 }
 
@@ -63,11 +62,11 @@ int main()
 		try{
 			getline(cin,line);
 			ProcessLine(line, program, state);
-			int lineNumber = program.getFirstLineNumber();
-			while (lineNumber >= 0) {
-				cout << program.getSourceLine(lineNumber) << endl;
-				lineNumber = program.getNextLineNumber(lineNumber);
-			}
+			//int lineNumber = program.getFirstLineNumber();
+			//while (lineNumber >= 0) {
+			//	cout << program.getSourceLine(lineNumber) << endl;
+			//	lineNumber = program.getNextLineNumber(lineNumber);
+			//}
 		}
 		catch (MyError & ex) {
 			//cerr << "Error: " << ex.getMessage() << endl;

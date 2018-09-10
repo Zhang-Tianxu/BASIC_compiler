@@ -15,7 +15,8 @@ Program::~Program() {
 }
 
 void Program::clear() {
-	program.clear();
+	std::cout << "Clear executed!" << std::endl;
+	//program.clear();
 }
 
 void Program::addSourceLine(int lineNumber, std::string line) {
@@ -40,8 +41,11 @@ void Program::removeSourceLine(int lineNumber) {
 }
 
 int Program::getFirstLineNumber() {
-
-	return (*program.begin()).first;
+	//std::cout << "There is no first line" << std::endl;
+	if (program.empty())
+		return -1;
+	else
+		return (*program.begin()).first;
 }
 
 int Program::getNextLineNumber(int lineNumber) {

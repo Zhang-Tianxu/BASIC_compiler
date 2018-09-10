@@ -21,17 +21,52 @@
 #include "exp.h"
 #include "evalstate.h"
 #include "tokenscanner.h"
-using namespace std;
+#include "program.h"
 
-
+class Program;//类的前置声明，缺少会出现error C2061
 class Statement {
 public:
 	Statement();
 	virtual ~Statement();
-	virtual void excute(EvalState & state) = 0;//pure virtual method
-private:
+	virtual void execute(Program & program,EvalState & state) = 0;//pure virtual method
+	//virtual void execute(Program & program) = 0;
+//private:
 };
 
+
+//********************************************
+class ListStmt :public Statement {
+public:
+	ListStmt();
+	virtual ~ListStmt();
+	virtual void execute(Program & program, EvalState & state);
+};
+
+//*********************************************
+class ClearStmt :public Statement {
+public:
+	ClearStmt();
+	virtual ~ClearStmt();
+
+	virtual void execute(Program & program, EvalState & state);
+};
+//*********************************************
+class HelpStmt :public Statement {
+public:
+	HelpStmt();
+	virtual ~HelpStmt();
+
+	virtual void execute(Program & program, EvalState & state);
+
+};
+//*********************************************
+class QuitStmt :public Statement {
+public:
+	QuitStmt();
+	virtual ~QuitStmt();
+
+	virtual void execute(Program & program, EvalState & state);
+};
 
 class PrintStmt :public Statement {
 public:
@@ -49,7 +84,7 @@ public:
 	 * that value in the variable that appears on the left side.
 	 *
 	*/
-	virtual void execute(EvalState & state);
+	virtual void execute(Program & program, EvalState & state);
 private:
 	Expression *exp;
 };

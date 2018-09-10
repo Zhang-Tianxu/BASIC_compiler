@@ -23,6 +23,7 @@
 * 2.The parsed representation of that statement, which is a pointer to a Statement.
 */
 
+class Statement;
 class Program{
 
 public:
