@@ -28,7 +28,7 @@ public:
 
 	std::string getFirstToken();
 
-	std::string nextToken();
+	std::string getSecondToken();
 private:
 	std::vector<std::string> tokens;
 

@@ -24,6 +24,13 @@
 #include "program.h"
 
 class Program;//类的前置声明，缺少会出现error C2061
+
+/*
+ * Virtual Class: Statement
+ * --------------------------
+ * Class Statement is a superclass
+ *
+*/
 class Statement {
 public:
 	Statement();
@@ -33,8 +40,24 @@ public:
 //private:
 };
 
+/*
+ * Subclass: RunStmt
+ * --------------------------
+ * Statement of run
+*/
+class RunStmt :public Statement {
+public:
+	RunStmt();
+	virtual ~RunStmt();
+	virtual void execute(Program & program, EvalState & state);
+};
 
-//********************************************
+/*
+ * Subclass: ListStmt
+ * --------------------------
+ * Statement of list
+ *
+*/
 class ListStmt :public Statement {
 public:
 	ListStmt();
@@ -42,7 +65,12 @@ public:
 	virtual void execute(Program & program, EvalState & state);
 };
 
-//*********************************************
+/*
+ * Subclass: ClearStmt
+ * ----------------------
+ * Statement of clear
+ *
+*/
 class ClearStmt :public Statement {
 public:
 	ClearStmt();
@@ -50,7 +78,12 @@ public:
 
 	virtual void execute(Program & program, EvalState & state);
 };
-//*********************************************
+/*
+ * Subclass: HelpStmt
+ * --------------------------
+ * Statement of help
+ * 
+*/
 class HelpStmt :public Statement {
 public:
 	HelpStmt();
@@ -59,7 +92,13 @@ public:
 	virtual void execute(Program & program, EvalState & state);
 
 };
-//*********************************************
+
+
+/*
+ * Subclass: QuitStmt
+ * ------------------------
+ * Statement of quit
+*/
 class QuitStmt :public Statement {
 public:
 	QuitStmt();
@@ -68,6 +107,12 @@ public:
 	virtual void execute(Program & program, EvalState & state);
 };
 
+
+/*
+ * Subclass: PrintStmt
+ * ---------------------------
+ * Statement of Print
+*/
 class PrintStmt :public Statement {
 public:
 	PrintStmt(TokenScanner & scanner);
@@ -88,31 +133,5 @@ public:
 private:
 	Expression *exp;
 };
-
-class RemStmt :public Statement {
-
-};
-
-class LetStmt :public Statement {
-
-};
-
-class InputStmt :public Statement {
-
-};
-
-class GotoStmt :public Statement {
-
-};
-
-class IfStmt :public Statement {
-
-};
-
-class EndStmt :public Statement {
-
-};
-
-
 
 #endif

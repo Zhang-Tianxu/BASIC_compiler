@@ -41,6 +41,6 @@ std::string TokenScanner::getFirstToken() {
 }
 
 
-std::string TokenScanner::nextToken() {
+std::string TokenScanner::getSecondToken() {
 	return tokens[1];
 }

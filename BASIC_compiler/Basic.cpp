@@ -61,11 +61,6 @@ int main()
 		try{
 			getline(cin,line);
 			ProcessLine(line, program, state);
-			//int lineNumber = program.getFirstLineNumber();
-			//while (lineNumber >= 0) {
-			//	cout << program.getSourceLine(lineNumber) << endl;
-			//	lineNumber = program.getNextLineNumber(lineNumber);
-			//}
 		}
 		catch (MyError & ex) {
 			//cerr << "Error: " << ex.getMessage() << endl;
