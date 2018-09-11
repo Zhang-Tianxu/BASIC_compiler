@@ -18,10 +18,11 @@
 #define _statement_h
 
 
-#include "exp.h"
+//#include "exp.h"
 #include "evalstate.h"
 #include "tokenscanner.h"
 #include "program.h"
+#include "parser.h"
 
 class Program;//类的前置声明，缺少会出现error C2061
 
@@ -130,8 +131,8 @@ public:
 	 *
 	*/
 	virtual void execute(Program & program, EvalState & state);
-private:
-	Expression *exp;
+//private:
+//	Expression *exp;
 };
 
 #endif

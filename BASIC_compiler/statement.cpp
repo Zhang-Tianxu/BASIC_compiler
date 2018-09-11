@@ -30,44 +30,84 @@ RunStmt::~RunStmt() {
 
 void RunStmt::execute(Program & program, EvalState & state) {
 	//从program里读出sourceLine,
+	int i, len;
+	std::string number;
+	std::string identifier;
+	std::string rest;
+	std::cout << "Runing" << std::endl;
 	int currentLineNumber = program.getFirstLineNumber();
+	std::cout << "current line number is " << currentLineNumber << std::endl;
 	while (currentLineNumber >= 0) {
-		//std::vector<std::string> tokens;
-		//split(program.getSourceLine(currentLineNumber), " ", tokens);
-		std::string number;//语句前的编号
-		std::string identifier;//语句的标识符
-		std::string rest;//语句的剩余部分
+		std::cout << "current line number is " << currentLineNumber << std::endl;
+		std::string line = program.getSourceLine(currentLineNumber);
 
-		if (identifier == "REM")
+		std::cout << "current source line is " << line << std::endl;
+		number = "";//语句前的编号
+		identifier = "";//语句的标识符
+		rest = "";//语句的剩余部分
+		//如何从rest这个字符串中分理处不同的内容。
+		i = 0;
+		len = line.size();
+		while (line[i] == ' ' && i < len )
 		{
-			
-			currentLineNumber = program.getNextLineNumber(currentLineNumber);
-			std::cout << "REM normal" << std::endl;
+			i++;
 		}
-		else if (identifier == "LET")
+		for (; line[i] != ' '&& i < len; i++)
+		{
+			number.push_back(line[i]);
+		}
+
+		while (line[i] == ' ' && i < len)
+		{
+			i++;
+		}
+		for (; line[i] != ' '&& i < len; i++)
+		{
+			identifier.push_back(line[i]);
+		}
+		while (line[i] == ' ' && i < len)
+		{
+			i++;
+		}
+		for (; i < len; i++)
+		{
+			if (line[i] != ' ')
+				rest.push_back(line[i]);
+		}
+
+		std::cout << "number is " << number << std::endl;
+		std::cout << "identifier is " << identifier << std::endl;
+		std::cout << "rest is " << rest << std::endl;
+
+		if (identifier == "REM") // number REM (message) 
 		{
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
-		else if (identifier == "PRINT")
+		else if (identifier == "LET")//number LET (var = exp)
 		{
-			/*Expression* exp = parseExp();
-			std::cout << exp->eval << std::endl;*/
+			//Expression* exp = parseExp(rest);
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
-		else if (identifier == "INPUT")
+		else if (identifier == "PRINT")//number PRINT (exp)
+		{
+			std::cout << parseExp(rest,state) << std::endl;
+			currentLineNumber = program.getNextLineNumber(currentLineNumber);
+		}
+		else if (identifier == "INPUT")//number INPUT (var)
 		{
 			int inp;
 			std::cin >> inp;
 			state.setValue(rest, inp);//这样不够健壮，假设了用户会按照期望输入
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
-			std::cout << "INPUT normal" << std::endl;
 		}
-		else if (identifier == "GOTO")
+		else if (identifier == "GOTO")//number GOTO (pos)
 		{
 			currentLineNumber = stoi(rest);//这样不够健壮，假设了用户会按照期望输入
 		}
-		else if (identifier == "IF")
+		else if (identifier == "IF")//number IF (exp ==exp THEN pos)
 		{
+			Expression* exp1;
+			Expression* exp2;
 			/*if (){
 				currentLineNumber = ;
 			}
@@ -76,10 +116,9 @@ void RunStmt::execute(Program & program, EvalState & state) {
 				currentLineNumber = program.getNextLineNumber(currentLineNumber);
 			}*/
 		}
-		else if (identifier == "END")
+		else if (identifier == "END")//number END
 		{
 			currentLineNumber = -1;
-			std::cout << "END normal" << std::endl;
 		}
 		else
 		{
@@ -162,11 +201,11 @@ PrintStmt::PrintStmt(TokenScanner & scanner) {  //Where is class TokenScanner fr
 }
 
 PrintStmt::~PrintStmt() {
-	delete exp;
+	//delete exp;
 }
 
 
 void PrintStmt::execute(Program & program, EvalState & state) {
-	std::cout << exp->eval(state) << std::endl;
+	//std::cout << exp->eval(state) << std::endl;
 }
 //*************************************************************

@@ -50,22 +50,26 @@ public:
 	 * Returns the type of the expression, which must be one of the constants
 	 * CONSTANT, IDENTIFIER, or COMPOUND.
 	*/
-	virtual ExpressionType getType() = 0;//This is a PVF(Pure Virtual Function)
+	//virtual ExpressionType getType() = 0;//This is a PVF(Pure Virtual Function)
 private:
 };
 
 
 //inherite and add their own method
-class ConstantExp:public Expression {
-
-};
-
-class IdentifierExp :public Expression {
-
-};
+//class ConstantExp:public Expression {
+//
+//};
+//
+//class IdentifierExp :public Expression {
+//
+//};
 
 class CompoundExp :public Expression {
-
+public:
+	CompoundExp();
+	virtual ~CompoundExp();
+	virtual int eval(EvalState & state);
+	virtual std::string toString();
 };
 
 #endif

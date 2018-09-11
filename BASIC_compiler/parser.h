@@ -17,9 +17,40 @@
 #include "program.h"
 
 
-
+class Statement;
 
 enum IdentifierType {REM,LET,PRINT,INPUT,GOTO,IF,END,RUN,LIST,CLEAR,HELP,QUIT};
+
+enum VType {VARIABLE,DIGIT,UNKNOW};
+
+class VarOrDigit {
+public:
+	VarOrDigit() :type(UNKNOW){};
+	~VarOrDigit(){};
+	void setType(VType t)
+	{
+		type = t;
+	}
+	VType getType() {
+		return type;
+	}
+	void setContent(std::string con) {
+		content = con;
+	}
+	void addContentC(char c) {
+		content.push_back(c);
+	}
+	std::string getContent() {
+		return content;
+	}
+	void clear(){
+		type = UNKNOW;
+		content.clear();
+	}
+private:
+	VType type;
+	std::string content;
+};
 
 /*
  * Method: parseExp
@@ -38,14 +69,74 @@ enum IdentifierType {REM,LET,PRINT,INPUT,GOTO,IF,END,RUN,LIST,CLEAR,HELP,QUIT};
  * which will then go through and read the remaining tokens on the line and assemble them into a PrintStmt object.
  *
 */
+
+
 Statement* parseStatement(TokenScanner & scanner);
 
-Expression* parseExp(TokenScanner & scanner);
+/*
+ * Method: isOperator
+ * Usage: bool = isOperator(char)
+ * -------------------------------------
+ * return true if input char is operator
+ *
+*/
+bool isOperator(char c);
 
-Expression* readE(TokenScanner & scanner, int prec = 0);
 
-Expression* readT(TokenScanner & scanner);
+/*
+ * Method: getIndex
+ * Usage: int index = getIndex(operator)
+ * -------------------------------------
+ * Return the index of the operator
+ * the index is definde by the priority table
+ *  -----------------------------------------------
+ *       |  +  |  -  |  *  |  /  |  (  |  )  |  #  |  
+ *  -----------------------------------------------
+ *    +  |  >  |  >  |  <  |  <  |  <  |  >  |  >  |
+ *  -----------------------------------------------
+ *    -  |  >  |  >  |  <  |  <  |  <  |  >  |  >  |
+ *  -----------------------------------------------
+ *    *  |  >  |  >  |  >  |  >  |  <  |  >  |  >  |
+ *  -----------------------------------------------
+ *    /  |  >  |  >  |  >  |  >  |  <  |  >  |  >  |
+ *  -----------------------------------------------
+ *    (  |  <  |  <  |  <  |  <  |  <  |  =  |     |
+ *  -----------------------------------------------
+ *    )  |  >  |  >  |  >  |  >  |     |  >  |  >  |
+ *  -----------------------------------------------
+ *    #  |  <  |  <  |  <  |  <  |  <  |     |  =  |
+ *  -----------------------------------------------
+*/
 
-int precedence(std::string operatorToken);
+int getIndex(char opt);
+
+/*
+ * Method:getPriority
+ * Usage: char ans = getPriority('+','*')
+ * ------------------------------------------
+ * Compare priority between two operators, if opt1 prior to opt2
+ * then return '>',else return '<'
+*/
+char getPriority(char opt1, char opt2);
+
+/*
+
+*/
+int calculate(int b, char opt, int a);   //¼ÆËãb opt a
+
+
+/*
+ * Method: parseExp
+ * Usage: parseExp(line,state)
+ * ----------------------------
+ * 
+*/
+int parseExp(std::string line,EvalState & state);
+
+//Expression* readE(TokenScanner & scanner, int prec = 0);
+//
+//Expression* readT(TokenScanner & scanner);
+//
+//int precedence(std::string operatorToken);
 
 #endif
