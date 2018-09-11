@@ -35,8 +35,7 @@ void ProcessLine(string line, Program & program, EvalState & state) {//Òª±£´æ³ÌĞ
 		int tokenNumber = stoi(firstToken);
 		if (scanner.getLength() > 1)
 		{
-			std::cout << "scanner's length is " << scanner.getLength() << std::endl;
-		program.addSourceLine(tokenNumber, line);
+			program.addSourceLine(tokenNumber, line);
 		}
 		else//only line number, then delete sourceline
 		{

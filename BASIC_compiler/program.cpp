@@ -15,8 +15,7 @@ Program::~Program() {
 }
 
 void Program::clear() {
-	std::cout << "Clear executed!" << std::endl;
-	//program.clear();
+	program.clear();
 }
 
 void Program::addSourceLine(int lineNumber, std::string line) {
