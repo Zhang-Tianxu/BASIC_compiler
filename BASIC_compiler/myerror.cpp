@@ -10,10 +10,34 @@
 
 #include "myerror.h"
 
-MyError::MyError(std::string message) {
+emptyVarError::emptyVarError() {
+
+}
+emptyVarError::emptyVarError(std::string var)
+{
+	message = var + "is not defined!";
+}
+emptyVarError::~emptyVarError() {
 
 }
 
-MyError::~MyError() {
+
+
+wrongInput::wrongInput() {
+	message = "Input wrong!";
+}
+wrongInput::~wrongInput() {
+
+}
+
+wrongExpressionFormat::wrongExpressionFormat() {
+	message = "It is not a correct expression!";
+}
+
+wrongExpressionFormat::wrongExpressionFormat(std::string exp) {
+	message = exp + " is not a correct expression!";
+}
+
+wrongExpressionFormat::~wrongExpressionFormat() {
 
 }

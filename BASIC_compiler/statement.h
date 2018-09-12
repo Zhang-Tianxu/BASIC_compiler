@@ -118,21 +118,37 @@ class PrintStmt :public Statement {
 public:
 	PrintStmt(TokenScanner & scanner);
 	virtual ~PrintStmt();
-
-	/*
-	 * Method: execute
-	 * Usage: 
-	 * -----------------------------------------------------------
-	 * An execute method, which allows the interpreter to simulate the operation 
-	 * of that statement when the program runs. 
-	 * For the LetStmt class, the execute method has to evaluate the expression 
-	 * that appeared on the right side of the equal sign and then store 
-	 * that value in the variable that appears on the left side.
-	 *
-	*/
 	virtual void execute(Program & program, EvalState & state);
-//private:
-//	Expression *exp;
+private:
+std::string line;
+};
+
+/*
+ * Subclass: PrintStmt
+ * ---------------------------
+ * Statement of Print
+*/
+class LetStmt :public Statement {
+public:
+	LetStmt(TokenScanner & scanner);
+	virtual ~LetStmt();
+	virtual void execute(Program & program, EvalState & state);
+private:
+std::string line;
+};
+
+/*
+ * Subclass: PrintStmt
+ * ---------------------------
+ * Statement of Print
+*/
+class InputStmt :public Statement {
+public:
+	InputStmt(TokenScanner & scanner);
+	virtual ~InputStmt();
+	virtual void execute(Program & program, EvalState & state);
+private:
+std::string line;
 };
 
 #endif

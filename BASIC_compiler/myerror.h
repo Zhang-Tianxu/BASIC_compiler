@@ -12,11 +12,42 @@
 #ifndef _myerror_h
 #define _myerror_h
 
-class MyError: public std::exception { // How to implement my own error type?
+class emptyVarError:public std::exception {
 public:
-	MyError(std::string mssage);
-	~MyError();
-
+	emptyVarError();
+	emptyVarError(std::string var);
+	~emptyVarError();
+	const std::string what()
+	{
+		return message;
+	}
+private:
+	std::string message;
 };
 
+class wrongInput :public std::exception {
+public:
+	wrongInput();
+	~wrongInput();
+	const std::string what()
+	{
+		return message;
+	}
+private:
+	std::string message;
+};
+
+
+class wrongExpressionFormat :public std::exception {
+public:
+	wrongExpressionFormat();
+	wrongExpressionFormat(std::string exp);
+	~wrongExpressionFormat();
+	const std::string what()
+	{
+		return message;
+	}
+private:
+	std::string message;
+};
 #endif

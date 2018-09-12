@@ -2,7 +2,7 @@
  * File: statement.cpp
  * -------------------------
  * This file is the implementation for Statement
-*/
+ */
 
 #include <iostream>
 
@@ -29,22 +29,23 @@ RunStmt::~RunStmt() {
 }
 
 void RunStmt::execute(Program & program, EvalState & state) {
-	//从program里读出sourceLine,
 	int i, len;
 	std::string number;
 	std::string identifier;
 	std::string rest;
+
 	int currentLineNumber = program.getFirstLineNumber();
+
 	while (currentLineNumber >= 0) {
 		std::string line = program.getSourceLine(currentLineNumber);
-
-		number = "";//语句前的编号
-		identifier = "";//语句的标识符
-		rest = "";//语句的剩余部分
-		//如何从rest这个字符串中分理处不同的内容。
-		i = 0;
 		len = line.size();
-		while (line[i] == ' ' && i < len )
+		number = "";
+		identifier = "";
+		rest = "";
+
+
+		i = 0;
+		while (line[i] == ' ' && i < len)
 		{
 			i++;
 		}
@@ -71,9 +72,6 @@ void RunStmt::execute(Program & program, EvalState & state) {
 				rest.push_back(line[i]);
 		}
 
-		//std::cout << "number is " << number << std::endl;
-		//std::cout << "identifier is " << identifier << std::endl;
-		//std::cout << "rest is " << rest << std::endl;
 
 		if (identifier == "REM") // number REM (message) 
 		{
@@ -81,7 +79,6 @@ void RunStmt::execute(Program & program, EvalState & state) {
 		}
 		else if (identifier == "LET")//number LET (var = exp)
 		{
-			//Expression* exp = parseExp(rest);
 			std::string var;
 			std::string exp;
 			i = 0;
@@ -94,21 +91,25 @@ void RunStmt::execute(Program & program, EvalState & state) {
 			{
 				exp.push_back(rest[i++]);
 			}
-			//std::cout << "var is " << var << std::endl;
-			//std::cout << "exp is " << exp << std::endl;
-			state.setValue(var, parseExp(exp,state));
+
+			if (isdigit(var[0]))
+			{
+				//变量不能以数字开头，抛出错误
+				throw "variable can't start with number!";
+			}
+			state.setValue(var, parseExp(exp, state));
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "PRINT")//number PRINT (exp)
 		{
-			std::cout << parseExp(rest,state) << std::endl;
+			std::cout << parseExp(rest, state) << std::endl;
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "INPUT")//number INPUT (var)
 		{
 			int inp;
 			std::cin >> inp;
-			state.setValue(rest, inp);//这样不够健壮，假设了用户会按照期望输入
+			state.setValue(rest, inp);
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "GOTO")//number GOTO (pos)
@@ -121,7 +122,7 @@ void RunStmt::execute(Program & program, EvalState & state) {
 			char comparisonSign;
 			std::string exp2;
 			std::string pos;
-			
+
 
 			i = 0;
 			while (rest[i] != '>' && rest[i] != '<'&&rest[i] != '=')
@@ -137,23 +138,12 @@ void RunStmt::execute(Program & program, EvalState & state) {
 				pos.push_back(rest[i++]);
 			}
 
-			//std::cout << "exp1 is " << exp1 << std::endl;
-			//std::cout << "comparison sign  is " << comparisonSign << std::endl;
-			//std::cout << "exp2 is " << exp2 << std::endl;
-			//std::cout << "pos is " << pos << std::endl;
 			if (comparisonSign == '=' && parseExp(exp1, state) == parseExp(exp2, state))
 				currentLineNumber = stoi(pos);
 			if (comparisonSign == '<' && parseExp(exp1, state) < parseExp(exp2, state))
 				currentLineNumber = stoi(pos);
 			if (comparisonSign == '>' && parseExp(exp1, state) > parseExp(exp2, state))
 				currentLineNumber = stoi(pos);
-			/*if (){
-				currentLineNumber = ;
-			}
-			else
-			{
-				currentLineNumber = program.getNextLineNumber(currentLineNumber);
-			}*/
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "END")//number END
@@ -163,6 +153,7 @@ void RunStmt::execute(Program & program, EvalState & state) {
 		else
 		{
 			//error
+			throw "wrong Statement!";
 		}
 	}
 }
@@ -176,7 +167,7 @@ ListStmt::ListStmt() {
 ListStmt::~ListStmt() {
 
 }
-void ListStmt::execute(Program & program,EvalState & state) {
+void ListStmt::execute(Program & program, EvalState & state) {
 	int lineNumber = program.getFirstLineNumber();
 	while (lineNumber >= 0) {
 		std::cout << program.getSourceLine(lineNumber) << std::endl;
@@ -193,7 +184,7 @@ ClearStmt::~ClearStmt() {
 
 }
 
-void ClearStmt::execute(Program & program,EvalState & state) {
+void ClearStmt::execute(Program & program, EvalState & state) {
 	program.clear();
 }
 
@@ -212,7 +203,71 @@ HelpStmt::~HelpStmt() {
 
 void HelpStmt::execute(Program & program, EvalState & state) {
 	//print help information
-	std::cout << "Here is some Help informations" << std::endl;
+	std::cout <<
+		"COMMAND:" << std::endl
+		<< "1:RUN" << std::endl
+		<< "******************" << std::endl
+		<< "    run the program you stored" << std::endl
+		<< std::endl
+		<< "2:LIST" << std::endl
+		<< "******************" << std::endl
+		<< "    print the program you stored" << std::endl
+		<< std::endl
+		<< "3:CLEAR" << std::endl
+		<< "******************" << std::endl
+		<< "    clear the program you stored" << std::endl
+		<< std::endl
+		<< "4:HELP" << std::endl
+		<< "******************" << std::endl
+		<< "    ask for help information" << std::endl
+		<< std::endl
+		<< "5:QUIT" << std::endl
+		<< "******************" << std::endl
+		<< "    exit" << std::endl
+		<< std::endl
+		<< "6:PRINT" << std::endl
+		<< "******************" << std::endl
+		<< "    PRINT exp .print the expression." << std::endl
+		<< std::endl
+		<< "7:LET" << std::endl
+		<< "******************" << std::endl
+		<< "    LET var = exp. Assign exp's result to var. " << std::endl
+		<< std::endl
+		<< "8:INPUT" << std::endl
+		<< "******************" << std::endl
+		<< "    INPUT var. Input a value and assign it to var." << std::endl
+		<< std::endl
+		<< "PROGRAM:" << std::endl
+		<< "******************" << std::endl
+		<< "program sentence must start with number and one of the statement that follows:" << std::endl
+		<< std::endl
+		<< "1:REM" << std::endl
+		<< "******************" << std::endl
+		<< "	Followed by comments" << std::endl
+		<<  std::endl
+		<< "2:LET" << std::endl
+		<< "******************" << std::endl
+		<< "	LET var = exp. Assign exp's result to var." << std::endl
+		<<  std::endl
+		<< "3:PRINT" << std::endl
+		<< "******************" << std::endl
+		<< "	PRINT exp .print the expression." << std::endl
+		<<  std::endl
+		<< "4:INPUT" << std::endl
+		<< "******************" << std::endl
+		<< "	INPUT var. Input a value and assign it to var." << std::endl
+		<<  std::endl
+		<< "5:GOTO" << std::endl
+		<< "******************" << std::endl
+		<< "	GOTO n. Forces an unconditional change in the control flow of the program." << std::endl
+		<<  std::endl
+		<< "6:IF/THEN" << std::endl
+		<< "******************" << std::endl
+		<< "	IF exp1 op exp2 THEN n. where exp1 and exp2 are expressions and op is one of the conditional operators = , <, or >.If the condition holds, the program should continue from line n just as in the GOTO statement.If not, the program continues on to the next line" << std::endl
+		<<  std::endl
+		<< "7:END" << std::endl
+		<< "******************" << std::endl
+		<< "	Marks the end of the program." << std::endl;
 }
 //**************************************************
 
@@ -226,6 +281,7 @@ QuitStmt::~QuitStmt() {
 
 }
 void QuitStmt::execute(Program & program, EvalState & state) {
+	std::cout << "Bye!" << std::endl;
 	exit(0);
 }
 //*****************************************************
@@ -233,19 +289,78 @@ void QuitStmt::execute(Program & program, EvalState & state) {
 
 
 //***************PrintStmt********************************
-PrintStmt::PrintStmt(TokenScanner & scanner) {  //Where is class TokenScanner from?
-	//exp = readE(scanner); // and where is the method readE(scanner) from?
-	//if (scanner.hasMoreTokens()) {
-	//	error("Extraneous token " + scanner.nextToken());
-	//}
+PrintStmt::PrintStmt(TokenScanner & scanner) {
+	int i = 1;
+	while (i < scanner.getTokens().size())
+	{
+		line += scanner.getTokens()[i++];
+	}
 }
 
 PrintStmt::~PrintStmt() {
-	//delete exp;
+
 }
 
 
 void PrintStmt::execute(Program & program, EvalState & state) {
-	//std::cout << exp->eval(state) << std::endl;
+	std::cout << parseExp(line, state) << std::endl;
+}
+//*************************************************************
+
+//***************LetStmt********************************
+LetStmt::LetStmt(TokenScanner & scanner) {
+	int i = 1;
+	while (i < scanner.getTokens().size())
+	{
+		line += scanner.getTokens()[i++];
+	}
+}
+
+LetStmt::~LetStmt() {
+
+}
+
+
+void LetStmt::execute(Program & program, EvalState & state) {
+	std::string var;
+	std::string exp;
+	int i = 0;
+	while (line[i] != '=')
+	{
+		var.push_back(line[i++]);
+	}
+	i++;
+	while (i < line.size())
+	{
+		exp.push_back(line[i++]);
+	}
+
+	if (isdigit(var[0]))
+	{
+		//变量不能以数字开头，抛出错误
+		throw "variable can't start with number!";
+	}
+	state.setValue(var, parseExp(exp, state));
+}
+//*************************************************************
+
+//***************InputStmt********************************
+InputStmt::InputStmt(TokenScanner & scanner) {
+	int i = 1;
+	while (i < scanner.getTokens().size())
+	{
+		line += scanner.getTokens()[i++];
+	}
+}
+
+InputStmt::~InputStmt() {
+
+}
+
+
+void InputStmt::execute(Program & program, EvalState & state) {
+	int inp;
+	std::cin >> inp;
+	state.setValue(line, inp);
 }
 //*************************************************************

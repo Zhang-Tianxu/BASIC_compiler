@@ -34,9 +34,21 @@ Statement* parseStatement(TokenScanner & scanner) {
 		return new QuitStmt();
 
 	}
+	else if (scanner.getFirstToken() == "PRINT")
+	{
+		return new PrintStmt(scanner);
+	}
+	else if (scanner.getFirstToken() == "INPUT")
+	{
+		return new InputStmt(scanner);
+	}
+	else if (scanner.getFirstToken() == "LET")
+	{
+		return new LetStmt(scanner);
+	}
 	else
 	{
-		return NULL;//throw error
+		throw "wrong command!";
 	}
 }
 
@@ -141,11 +153,10 @@ int parseExp(std::string line,EvalState & state) {
 	operatorStack.push('#');
 	int i = 0;
 	int len = line.size();
-	//std::cout << "length of line is " << len << std::endl;
 
 	VarOrDigit tmp;
 	
-	while (!operatorStack.empty())//(line[i] != '#' || operatorStack.top() != '#')
+	while(i < len) //(!operatorStack.empty())//(line[i] != '#' || operatorStack.top() != '#')
 	{
 		if (isOperator(line[i]))
 		{
@@ -179,25 +190,39 @@ int parseExp(std::string line,EvalState & state) {
 			case '>':
 			{
 						int num1, num2;
-						if (varStack.top().getType() == DIGIT)
+						if (!varStack.empty())
 						{
-							num1 = stoi(varStack.top().getContent());
-							varStack.pop();
+							if (varStack.top().getType() == DIGIT)
+							{
+								num1 = stoi(varStack.top().getContent());
+								varStack.pop();
+							}
+							else
+							{
+								num1 = state.getValue(varStack.top().getContent());
+								varStack.pop();
+							}
 						}
 						else
 						{
-							num1 = state.getValue(varStack.top().getContent());
-							varStack.pop();
+							throw "wrong expression!";
 						}
-						if (varStack.top().getType() == DIGIT)
+						if (!varStack.empty())
 						{
-							num2 = stoi(varStack.top().getContent());
-							varStack.pop();
+							if (varStack.top().getType() == DIGIT)
+							{
+								num2 = stoi(varStack.top().getContent());
+								varStack.pop();
+							}
+							else
+							{
+								num2 = state.getValue(varStack.top().getContent());
+								varStack.pop();
+							}
 						}
 						else
 						{
-							num2 = state.getValue(varStack.top().getContent());
-							varStack.pop();
+							throw "wrong expression!";
 						}
 						//std::cout << "num1 = " << num1 << std::endl;
 						//std::cout << "num2 = " << num2 << std::endl;
@@ -221,7 +246,7 @@ int parseExp(std::string line,EvalState & state) {
 			tmp.addContentC(line[i++]);
 		}
 	}
-	if (true)//i == len -1?
+	if (operatorStack.empty())//i == len -1?
 	{
 		//std::cout << "varStack.top()' content is " << varStack.top().getContent() << std::endl;
 		//get 出来的是变量的名字，而不是数字
@@ -232,6 +257,8 @@ int parseExp(std::string line,EvalState & state) {
 	}
 	else
 	{
-		//error
+		//抛出错误error
+		std::cout << "error" << std::endl;
+		throw wrongExpressionFormat(line);
 	}
 }

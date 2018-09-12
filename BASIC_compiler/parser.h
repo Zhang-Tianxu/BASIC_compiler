@@ -15,11 +15,11 @@
 #include "statement.h"
 #include "tokenscanner.h"
 #include "program.h"
+#include "myerror.h"
 
 
 class Statement;
 
-enum IdentifierType {REM,LET,PRINT,INPUT,GOTO,IF,END,RUN,LIST,CLEAR,HELP,QUIT};
 
 enum VType {VARIABLE,DIGIT,UNKNOW};
 
@@ -59,7 +59,8 @@ public:
 		else
 		{
 			//error
-			std::cout << "Variables can't start with digit" << std::endl;
+			/*std::cout << "Variables can't start with digit" << std::endl;*/
+			throw wrongInput();
 		}
 	}
 	std::string getContent() {

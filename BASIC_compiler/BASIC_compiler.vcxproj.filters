@@ -39,6 +39,9 @@
     <ClCompile Include="tokenscanner.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="stringMethod.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="exp.h">
@@ -62,10 +65,10 @@
     <ClInclude Include="myerror.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="stringMethod.h">
+    <ClInclude Include="tokenscanner.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="tokenscanner.h">
+    <ClInclude Include="stringMethod.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

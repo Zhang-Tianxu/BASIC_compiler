@@ -29,13 +29,11 @@ void Program::addSourceLine(int lineNumber, std::string line) {
 		program.erase(lineNumber);
 		program[lineNumber] = line;
 	}
-	//program.insert(std::pair<int, std::string>(lineNumber, line));
-	//program[lineNumber] = line;
-	//std::cout << "addSourceLine end." << std::endl;
 
 }
 
 void Program::removeSourceLine(int lineNumber) {
+	//如果不存在可以抛出错误，也可以不做处理
 	program.erase(lineNumber);
 }
 
@@ -68,33 +66,7 @@ int Program::getNextLineNumber(int lineNumber) {
 
 
 std::string Program::getSourceLine(int lineNumber) {
+
+	//如果不存在这一行源代码，抛出错误
 	return program[lineNumber];
-}
-
-void Program::setParsedStatement(int lineNumber, Statement *stmt) {
-	std::map<int, Statement*>::iterator it;
-	it = parsedProgram.find(lineNumber);
-	if (it == parsedProgram.end())
-	{
-		parsedProgram[lineNumber] = stmt;
-	}
-	else
-	{
-		parsedProgram.erase(lineNumber);
-		parsedProgram[lineNumber] = stmt;
-	}
-}
-
-
-Statement* Program::getParsedStatement(int lineNumber) {
-	std::map<int, Statement*>::iterator it;
-	it = parsedProgram.find(lineNumber);
-	if (it != parsedProgram.end())
-	{
-		return parsedProgram[lineNumber];
-	}
-	else
-	{
-		return NULL;
-	}
 }

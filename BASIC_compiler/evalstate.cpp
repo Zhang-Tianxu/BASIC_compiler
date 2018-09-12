@@ -10,6 +10,7 @@
 #include <string>
 
 #include "evalstate.h"
+#include "myerror.h"
 
 EvalState::EvalState() {
 
@@ -20,12 +21,29 @@ EvalState::~EvalState() {
 }
 
 void EvalState::setValue(std::string variable,int value) {
-	variableTable[variable] = value;
+	std::map<std::string, int>::iterator it;
+	it = variableTable.find(variable);
+	if (it == variableTable.end())
+		variableTable[variable] = value;
+	else
+	{
+		variableTable.erase(variable);
+		variableTable[variable] = value;
+	}
 }
 
 
 int EvalState::getValue(std::string variable) {
-	return variableTable[variable];
+	std::map<std::string, int>::iterator it;
+	it = variableTable.find(variable);
+	if (it != variableTable.end())
+		return variableTable[variable];
+	else
+	{
+		//throw() error
+		//变量不存在
+		throw  emptyVarError(variable);
+	}
 }
 
 

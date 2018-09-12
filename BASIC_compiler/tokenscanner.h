@@ -13,8 +13,6 @@
 #include <string>
 #include <vector>
 
-enum TokenType { NUMBER, OPERATOR, STRING, };
-
 
 class TokenScanner {
 public:
@@ -22,6 +20,7 @@ public:
 	TokenScanner(std::string line);
 	~TokenScanner();
 
+	std::vector<std::string> getTokens();
 	void setInput(std::string line);
 
 	int getLength();
@@ -31,8 +30,6 @@ public:
 	std::string getSecondToken();
 private:
 	std::vector<std::string> tokens;
-
-	//int currentPos;
 };
 
 

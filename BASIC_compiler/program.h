@@ -11,6 +11,7 @@
 #define _program_h
 
 #include <string>
+#include <map>
 
 #include "statement.h"
 
@@ -95,27 +96,6 @@ public:
 	std::string getSourceLine(int lineNumber);
 
 
-	/*
-	* Method: setParsedStatement
-	* Usage: program.setParsedStatement(lineNumber, stmt);
-	* ----------------------------------------------------
-	* Adds the parsed representation of the statement to the
-	* statement at the specified line number.
-	* If no such no such line number exists, this methond raises an error.
-	* If a previous parsed representation exists, the memory for that statement is reclaimed.
-	*/
-	void setParsedStatement(int lineNumber, Statement *stmt);
-
-
-	/*
-	 * Method: getParsedStatement
-	 * Usage: Statement *stmt = program.getParsedStatement(lineNumber);
-	 * -----------------------------------------------------------------
-	 * Retrieves the parsed representation of the statement at the
-	 * specified line number, or NULL, if no value has been set.
-	*/
-	Statement *getParsedStatement(int lineNumber);
-
 
 
 	/*
@@ -140,7 +120,7 @@ public:
 
 
 private:
-#include "programpriv.h"
+std::map<int, std::string> program;
 };
 
 #endif

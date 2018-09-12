@@ -27,6 +27,11 @@ TokenScanner::~TokenScanner() {
 
 }
 
+
+std::vector<std::string> TokenScanner::getTokens()
+{
+	return tokens;
+}
 void TokenScanner::setInput(std::string line) {
 	split(line, " ", tokens);
 }
