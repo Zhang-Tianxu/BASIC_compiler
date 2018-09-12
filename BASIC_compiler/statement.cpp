@@ -239,7 +239,9 @@ void HelpStmt::execute(Program & program, EvalState & state) {
 		<< std::endl
 		<< "PROGRAM:" << std::endl
 		<< "******************" << std::endl
-		<< "program sentence must start with number and one of the statement that follows:" << std::endl
+		<< "program sentence must start with number, the line numbers at the beginning of the line establish the sequence of operations in a program, the statements in a program are executed in ascending numerical order starting at the lowest number." << std::endl
+		<< "the standard mechanism for deleting lines was to type in a line number with nothing after it on the line." << std::endl
+		<< "And program key words as follows:" << std::endl
 		<< std::endl
 		<< "1:REM" << std::endl
 		<< "******************" << std::endl
