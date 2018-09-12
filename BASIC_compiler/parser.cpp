@@ -73,12 +73,12 @@ int getIndex(char opt) {
 				index = 3;
 				break;
 	}
-	case '<':
+	case '(':
 	{
 				index = 4;
 				break;
 	}
-	case '>':
+	case ')':
 	{
 				index = 5;
 				break;
@@ -128,17 +128,24 @@ int calculate(int b, char opt, int a)   //计算b opt a
 	}
 }
 
-
+/*
+ * 是变量的话，直接压入变量栈
+ * 是运算符的话需要判断优先级（优先级在头文件中已经给出）
+ *
+*/
 int parseExp(std::string line,EvalState & state) {
 	line.push_back('#');
+	std::cout << "line is " << line << std::endl;
 	std::stack<VarOrDigit> varStack;//变量开头不能是数字，若是数字表示这是一个常数
 	std::stack<char> operatorStack;
 	operatorStack.push('#');
 	int i = 0;
 	int len = line.size();
+	std::cout << "length of line is " << len << std::endl;
+
 	VarOrDigit tmp;
 	
-	while (line[i] != '#' || operatorStack.top() != '#')
+	while (!operatorStack.empty())//(line[i] != '#' || operatorStack.top() != '#')
 	{
 		if (isOperator(line[i]))
 		{
@@ -207,35 +214,12 @@ int parseExp(std::string line,EvalState & state) {
 			}
 			//operatorStack.push(line[i++]);
 		}
-		else
+		else //line[i] is not operator
 		{
-			if (isdigit(line[i]) && tmp.getType() == UNKNOW)
-			{
-				tmp.addContentC(line[i++]);
-				tmp.setType(DIGIT);
-
-			}
-			else if (isdigit(line[i]))
-			{
-				tmp.addContentC(line[i++]);
-			}
-			else if (tmp.getType() == UNKNOW)
-			{
-				tmp.addContentC(line[i++]);
-				tmp.setType(VARIABLE);
-				//error
-			}
-			else if (tmp.getType() == VARIABLE)
-			{
-				tmp.addContentC(line[i++]);
-			}
-			else
-			{
-				//error
-			}
+			tmp.addContentC(line[i++]);
 		}
 	}
-	if (i+1 == len)//i == len -1?
+	if (true)//i == len -1?
 	{
 		return stoi(varStack.top().getContent());
 	}

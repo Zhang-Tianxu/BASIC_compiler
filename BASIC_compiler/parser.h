@@ -38,7 +38,29 @@ public:
 		content = con;
 	}
 	void addContentC(char c) {
-		content.push_back(c);
+		if (isdigit(c) && type == UNKNOW)
+		{
+			content.push_back(c);
+			type = DIGIT;
+		}
+		else if (isdigit(c))
+		{
+			content.push_back(c);
+		}
+		else if (type == UNKNOW)
+		{
+			content.push_back(c);
+			type = VARIABLE;
+		}
+		else if (type == VARIABLE)
+		{
+			content.push_back(c);
+		}
+		else
+		{
+			//error
+			std::cout << "Variables can't start with digit" << std::endl;
+		}
 	}
 	std::string getContent() {
 		return content;
@@ -72,6 +94,14 @@ private:
 
 
 Statement* parseStatement(TokenScanner & scanner);
+
+
+
+
+/*
+ * 
+*/
+
 
 /*
  * Method: isOperator
