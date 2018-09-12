@@ -117,8 +117,36 @@ void RunStmt::execute(Program & program, EvalState & state) {
 		}
 		else if (identifier == "IF")//number IF (exp ==exp THEN pos)
 		{
-			Expression* exp1;
-			Expression* exp2;
+			std::string exp1;
+			char comparisonSign;
+			std::string exp2;
+			std::string pos;
+			
+
+			i = 0;
+			while (rest[i] != '>' && rest[i] != '<'&&rest[i] != '=')
+				exp1.push_back(rest[i++]);
+			comparisonSign = rest[i++];
+			while (i < rest.find("THEN"))
+			{
+				exp2.push_back(rest[i++]);
+			}
+			i += 4;
+			while (i < rest.size())
+			{
+				pos.push_back(rest[i++]);
+			}
+
+			//std::cout << "exp1 is " << exp1 << std::endl;
+			//std::cout << "comparison sign  is " << comparisonSign << std::endl;
+			//std::cout << "exp2 is " << exp2 << std::endl;
+			//std::cout << "pos is " << pos << std::endl;
+			if (comparisonSign == '=' && parseExp(exp1, state) == parseExp(exp2, state))
+				currentLineNumber = stoi(pos);
+			if (comparisonSign == '<' && parseExp(exp1, state) < parseExp(exp2, state))
+				currentLineNumber = stoi(pos);
+			if (comparisonSign == '>' && parseExp(exp1, state) > parseExp(exp2, state))
+				currentLineNumber = stoi(pos);
 			/*if (){
 				currentLineNumber = ;
 			}
@@ -126,6 +154,7 @@ void RunStmt::execute(Program & program, EvalState & state) {
 			{
 				currentLineNumber = program.getNextLineNumber(currentLineNumber);
 			}*/
+			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "END")//number END
 		{
