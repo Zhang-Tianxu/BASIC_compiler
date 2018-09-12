@@ -135,13 +135,13 @@ int calculate(int b, char opt, int a)   //计算b opt a
 */
 int parseExp(std::string line,EvalState & state) {
 	line.push_back('#');
-	std::cout << "line is " << line << std::endl;
+	//std::cout << "line is " << line << std::endl;
 	std::stack<VarOrDigit> varStack;//变量开头不能是数字，若是数字表示这是一个常数
 	std::stack<char> operatorStack;
 	operatorStack.push('#');
 	int i = 0;
 	int len = line.size();
-	std::cout << "length of line is " << len << std::endl;
+	//std::cout << "length of line is " << len << std::endl;
 
 	VarOrDigit tmp;
 	
@@ -149,6 +149,8 @@ int parseExp(std::string line,EvalState & state) {
 	{
 		if (isOperator(line[i]))
 		{
+			//std::cout << "saved var is " << tmp.getContent() << std::endl;
+			//std::cout << "type is " << tmp.getType() << std::endl;
 			if (tmp.getType() != UNKNOW)
 			{
 				varStack.push(tmp);
@@ -197,11 +199,11 @@ int parseExp(std::string line,EvalState & state) {
 							num2 = state.getValue(varStack.top().getContent());
 							varStack.pop();
 						}
-						std::cout << "num1 = " << num1 << std::endl;
-						std::cout << "num2 = " << num2 << std::endl;
+						//std::cout << "num1 = " << num1 << std::endl;
+						//std::cout << "num2 = " << num2 << std::endl;
 
-						std::cout << "calculated result is " << calculate(num2, operatorStack.top(), num1) << std::endl;
-						std::cout << "calculated result is " << std::to_string(calculate(num2, operatorStack.top(), num1)) << std::endl;
+						//std::cout << "calculated result is " << calculate(num2, operatorStack.top(), num1) << std::endl;
+						//std::cout << "calculated result is " << std::to_string(calculate(num2, operatorStack.top(), num1)) << std::endl;
 						VarOrDigit tmp1;
 						tmp1.setContent(std::to_string(calculate(num2, operatorStack.top(), num1)));
 						tmp1.setType(DIGIT);
@@ -221,7 +223,12 @@ int parseExp(std::string line,EvalState & state) {
 	}
 	if (true)//i == len -1?
 	{
-		return stoi(varStack.top().getContent());
+		//std::cout << "varStack.top()' content is " << varStack.top().getContent() << std::endl;
+		//get 出来的是变量的名字，而不是数字
+		if (varStack.top().getType() == DIGIT)
+			return stoi(varStack.top().getContent());
+		else
+			return state.getValue(varStack.top().getContent());
 	}
 	else
 	{

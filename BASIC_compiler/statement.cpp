@@ -34,14 +34,10 @@ void RunStmt::execute(Program & program, EvalState & state) {
 	std::string number;
 	std::string identifier;
 	std::string rest;
-	std::cout << "Runing" << std::endl;
 	int currentLineNumber = program.getFirstLineNumber();
-	std::cout << "current line number is " << currentLineNumber << std::endl;
 	while (currentLineNumber >= 0) {
-		std::cout << "current line number is " << currentLineNumber << std::endl;
 		std::string line = program.getSourceLine(currentLineNumber);
 
-		std::cout << "current source line is " << line << std::endl;
 		number = "";//语句前的编号
 		identifier = "";//语句的标识符
 		rest = "";//语句的剩余部分
@@ -75,9 +71,9 @@ void RunStmt::execute(Program & program, EvalState & state) {
 				rest.push_back(line[i]);
 		}
 
-		std::cout << "number is " << number << std::endl;
-		std::cout << "identifier is " << identifier << std::endl;
-		std::cout << "rest is " << rest << std::endl;
+		//std::cout << "number is " << number << std::endl;
+		//std::cout << "identifier is " << identifier << std::endl;
+		//std::cout << "rest is " << rest << std::endl;
 
 		if (identifier == "REM") // number REM (message) 
 		{
@@ -86,6 +82,21 @@ void RunStmt::execute(Program & program, EvalState & state) {
 		else if (identifier == "LET")//number LET (var = exp)
 		{
 			//Expression* exp = parseExp(rest);
+			std::string var;
+			std::string exp;
+			i = 0;
+			while (rest[i] != '=')
+			{
+				var.push_back(rest[i++]);
+			}
+			i++;
+			while (i < rest.size())
+			{
+				exp.push_back(rest[i++]);
+			}
+			//std::cout << "var is " << var << std::endl;
+			//std::cout << "exp is " << exp << std::endl;
+			state.setValue(var, parseExp(exp,state));
 			currentLineNumber = program.getNextLineNumber(currentLineNumber);
 		}
 		else if (identifier == "PRINT")//number PRINT (exp)
